@@ -1,0 +1,6 @@
+[package]
+name = "wifi-rs"
+version = "0.1.0"
+authors = ["Tochukwu Nkemdilim <nkemdilimtochukwu@gmail.com>"]
+
+[dependencies]
