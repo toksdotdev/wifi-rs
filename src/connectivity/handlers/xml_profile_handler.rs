@@ -3,7 +3,7 @@ use std::io;
 use connectivity::stubs::windows_wifi_profile;
 
 pub(crate) struct NetworkXmlProfileHandler {
-    pub(crate) content: String,
+    pub content: String,
 }
 
 impl NetworkXmlProfileHandler {
