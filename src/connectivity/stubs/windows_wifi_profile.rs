@@ -1,8 +1,6 @@
 pub fn get_wifi_profile() -> String {
-    String::from(
-        r#"
-    <?xml version="1.0"?>
-    <WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
+    String::from(r#"<?xml version="1.0"?>
+<WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
     <name>{SSID}</name>
     <SSIDConfig>
         <SSID>
@@ -25,11 +23,9 @@ pub fn get_wifi_profile() -> String {
             </sharedKey>
         </security>
     </MSM>
-    <MacRandomization 
-    xmlns="http://www.microsoft.com/networking/WLAN/profile/v3">
+    <MacRandomization  xmlns="http://www.microsoft.com/networking/WLAN/profile/v3">
         <enableRandomization>false</enableRandomization>
     </MacRandomization>
-    </WLANProfile>
-  "#,
+</WLANProfile>"#,
     )
 }
