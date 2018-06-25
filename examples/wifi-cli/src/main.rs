@@ -1,0 +1,43 @@
+extern crate clap;
+extern crate wifi_rs;
+
+use clap::{App, Arg};
+use std::io;
+use wifi_rs::WiFi;
+
+fn main() -> Result<(), io::Error> {
+    let matches = App::new("Wi-Fi")
+        .version("0.0.1")
+        .author("Tochukwu Nkemdilim")
+        .about("Connect to a Wi-Fi network 🎉")
+        .arg(
+            Arg::with_name("ssid")
+                .short("s")
+                .long("ssid")
+                .multiple(false)
+                .required(true)
+                .takes_value(true)
+                .help("SSID of wireless network."),
+        )
+        .arg(
+            Arg::with_name("password")
+                .short("p")
+                .long("password")
+                .multiple(false)
+                .required(true)
+                .takes_value(true)
+                .help("Password of the wireless network."),
+        )
+        .get_matches();
+
+    // Get Password
+    let password = matches.value_of("password").unwrap();
+
+    // Get SSID
+    let ssid = matches.value_of("ssid").unwrap();
+
+    let wifi = WiFi::new(ssid)?;
+    println!("Connection Status: {}", wifi.connect(password));
+
+    Ok(())
+}
