@@ -28,12 +28,24 @@ fn main() -> Result<(), io::Error> {
                 .takes_value(true)
                 .help("Password of the wireless network."),
         )
+        .arg(
+            Arg::with_name("interface")
+                .short("i")
+                .long("interface")
+                .multiple(false)
+                .default_value("wlan0")
+                .takes_value(true)
+                .help("Wireless interface to connect through."),
+        )
         .get_matches();
 
     // Get Password
     let password = matches.value_of("password").unwrap();
 
     // Get SSID
+    let ssid = matches.value_of("ssid").unwrap();
+
+    // Get Wireless Interface
     let ssid = matches.value_of("ssid").unwrap();
 
     let wifi = WiFi::new(ssid)?;

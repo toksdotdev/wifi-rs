@@ -10,7 +10,7 @@ mod tests {
     #[test]
     fn connect_to_wifi_failed() {
         let config = Some(Config {
-            interface: Some(String::from("wlo1")),
+            interface: Some("wlo1"),
         });
 
         let wifi = WiFi::new("hello", config).unwrap();
