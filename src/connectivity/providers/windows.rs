@@ -1,5 +1,5 @@
 use connectivity::handlers::NetworkXmlProfileHandler;
-use connectivity::Network;
+use connectivity::{Network, NetworkError};
 
 use std::process::Command;
 
@@ -11,14 +11,14 @@ pub(crate) struct Windows {
 
 impl Windows {
     #[cfg(target_os = "windows")]
-    pub fn new(name: &str) -> Result<Self, io::Error> {
-        Ok(Windows {
+    pub fn new(name: &str, interface: Option<&str>) -> Self {
+        Windows {
             name: String::from(name),
             output_xml_path: OUTPUT_XML_FILE_PATH.into(),
-        })
+        }
     }
 
-    pub(crate) fn add_profile(&self, password: &str) -> bool {
+    pub(crate) fn add_profile(&self, password: &str) -> Result<(), NetworkError> {
         let mut handler = NetworkXmlProfileHandler::new();
         handler.content = handler
             .content
@@ -26,12 +26,12 @@ impl Windows {
             .replace("{password}", password);
 
         // Write details to new xml file
-        if let Err(_) = handler.to_file(&self.output_xml_path).map_err(|_err| false) {
-            return false;
-        }
+        let _ = handler
+            .to_file(&self.output_xml_path)
+            .map_err(|err| NetworkError::IoError(err))?;
 
         // Add the network profile
-        if let Err(_) = Command::new("netsh")
+        Command::new("netsh")
             .args(&[
                 "wlan",
                 "add",
@@ -39,27 +39,34 @@ impl Windows {
                 &format!("filename={}", self.output_xml_path),
             ])
             .output()
-        {
-            return false;
-        }
+            .map_err(|_| NetworkError::AddNetworkProfileFailed)?;
 
-        true
+        Ok(())
     }
 }
 
 impl Network for Windows {
-    fn connect(&self, password: &str) -> bool {
-        if self.add_profile(password) == false {
-            return false;
-        }
+    fn connect(&self, password: &str) -> Result<bool, NetworkError> {
+        self.add_profile(password)?;
 
         let output = Command::new("netsh")
             .args(&["wlan", "connect", &format!("name={}", self.name)])
-            .output();
+            .output()
+            .map_err(|err| NetworkError::FailedToConnect(format!("{}", err)))?;
 
-        match output {
-            Ok(res) => res.status.success(),
-            Err(_) => false,
-        }
+        Ok(String::from_utf8_lossy(&output.stdout)
+            .as_ref()
+            .contains("successfully activated"))
+    }
+
+    fn disconnect(&self) -> Result<bool, NetworkError> {
+        let output = Command::new("netsh")
+            .args(&["wlan", "disconnect"])
+            .output()
+            .map_err(|err| NetworkError::FailedToDisconnect(format!("{}", err)))?;
+
+        Ok(String::from_utf8_lossy(&output.stdout)
+            .as_ref()
+            .contains("disconnect"))
     }
 }
