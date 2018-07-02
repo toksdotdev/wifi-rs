@@ -1,17 +1,16 @@
 use connectivity::handlers::NetworkXmlProfileHandler;
 use connectivity::Network;
-use std::io;
+
 use std::process::Command;
 
-const OUTPUT_XML_FILE_PATH: &str = "output.xml";
-
-#[cfg(target_os = "windows")]
+#[derive(Debug)]
 pub(crate) struct Windows {
     name: String,
     pub output_xml_path: String,
 }
 
 impl Windows {
+    #[cfg(target_os = "windows")]
     pub fn new(name: &str) -> Result<Self, io::Error> {
         Ok(Windows {
             name: String::from(name),
@@ -33,12 +32,17 @@ impl Windows {
 
         // Add the network profile
         if let Err(_) = Command::new("netsh")
-            .args(&["wlan", "add", "profile", &format!("filename={}", self.output_xml_path)])
+            .args(&[
+                "wlan",
+                "add",
+                "profile",
+                &format!("filename={}", self.output_xml_path),
+            ])
             .output()
-            {
-                return false;
-            }
-        
+        {
+            return false;
+        }
+
         true
     }
 }
@@ -48,7 +52,7 @@ impl Network for Windows {
         if self.add_profile(password) == false {
             return false;
         }
-        
+
         let output = Command::new("netsh")
             .args(&["wlan", "connect", &format!("name={}", self.name)])
             .output();

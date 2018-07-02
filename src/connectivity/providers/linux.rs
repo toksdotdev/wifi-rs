@@ -1,71 +1,110 @@
-use connectivity::{Network, NetworkType, NetworkTypeParseError};
-use std::io;
-use std::io::{Error, ErrorKind};
-use std::process::{Command, Output};
+extern crate tempfile;
 
+use self::tempfile::NamedTempFile;
+use connectivity::{Network, NetworkError, NetworkType};
+use std::process::{Command, Output};
+use std::{
+    fs::File, io::{Error, Read, Write},
+};
+
+#[derive(Debug)]
 pub struct Linux {
     pub name: String,
     pub network_type: NetworkType,
 }
 
 impl Linux {
-    pub fn new(name: String) -> Result<Self, io::Error> {
-        match Linux::check_if_web_or_wpa(name.clone()) {
+    pub fn new(name: &str) -> Result<Self, NetworkError> {
+        match Linux::check_if_web_or_wpa(name.into()) {
             Ok(t) => match t {
                 NetworkType::WEP => Ok(Linux {
-                    name: name.clone(),
+                    name: name.into(),
                     network_type: NetworkType::WEP,
                 }),
                 _ => Ok(Linux {
-                    name: name.clone(),
+                    name: name.into(),
                     network_type: NetworkType::WPA,
                 }),
             },
-            Err(_) => Err(Error::new(ErrorKind::Other, "Failed to parse")), // use the NetworkTypeParseError::IoError here
+            Err(err) => Err(err),
         }
     }
 
     /// Detects the network type of a given network.
-    fn check_if_web_or_wpa(name: String) -> Result<NetworkType, NetworkTypeParseError> {
+    fn check_if_web_or_wpa(name: String) -> Result<NetworkType, NetworkError> {
         Command::new("nmcli")
             .args(&[
+                "-t",
+                "-f",
+                "802-11-wireless-security.key-mgmt",
                 "con",
-                "list",
-                "id",
-                "\"",
+                "show",
                 &name,
-                "\"",
-                "|",
-                "awk",
-                "'/key-mgmt/ {{ print $2 }}'",
             ])
             .output()
-            .map_err(|err| NetworkTypeParseError::IoError(err))
+            .map_err(|err| NetworkError::IoError(err))
             .and_then(|output| {
-                String::from_utf8(output.stdout)
-                    .map_err(|err| NetworkTypeParseError::FromUtf8Error(err))
-                    .and_then(|result| match result.as_ref() {
-                        "wpa-psk" => Ok(NetworkType::WPA),
-                        _ => Ok(NetworkType::WEP),
-                    })
+                let output = String::from_utf8_lossy(&output.stdout);
+                let psk = {
+                    let mut split = output.split(':');
+                    let _ = split.next();
+                    match split.next() {
+                        Some(x) => x,
+                        None => return Err(NetworkError::SsidNotFound),
+                    }
+                };
+
+                match psk.trim() {
+                    "wpa-psk" => Ok(NetworkType::WPA),
+                    _ => Ok(NetworkType::WEP),
+                }
             })
     }
 
-    pub fn connect_to_wep_network(&self, password: &str) -> Result<Output, io::Error> {
-        Command::new("iwconfig")
+    pub fn connect_to_wep_network(&self, password: &str) -> Result<Output, NetworkError> {
+        Ok(Command::new("iwconfig")
             .args(&["wlan0", "essid", &self.name, "key", password])
             .output()
+            .map_err(|err| NetworkError::FailedToConnect(format!("{:?}", err)))?)
     }
 
-    pub fn connect_to_wpa_network(&self, password: &str) -> Result<Output, io::Error> {
-        // Dynamically generate differennt version of file (if running sync)
-        Command::new("wpa_passphrase")
-            .args(&[&self.name, password, "wpa.conf"])
+    pub fn connect_to_wpa_network(&self, password: &str) -> Result<Output, NetworkError> {
+        let passphrase = Command::new("wpa_passphrase")
+            .args(&[&self.name, password])
             .output()?;
 
-        Ok(Command::new("wpa_supplicant")
-            .args(&["-Dwext", "-i", "wlan0", "-c/root/wpa.conf"])
-            .output()?)
+        let wpa_conf_file = self.create_conf_file(&String::from_utf8_lossy(&passphrase.stdout))?;
+
+        let mut file = File::open(wpa_conf_file.path())?;
+        let mut new_content = String::new();
+        file.read_to_string(&mut new_content)?;
+
+        Command::new("wpa_supplicant")
+            .args(&[
+                "-D",
+                "wext",
+                "-B",
+                "-i",
+                "wlo1",
+                wpa_conf_file.path().to_str().unwrap(),
+            ])
+            .output()
+            .map_err(|err| NetworkError::FailedToConnect(format!("{:?}", err)))?;
+
+        let a = Command::new("dhclient").args(&["wlo1"]).output()?;
+        println!("{:?}", String::from_utf8_lossy(&a.stdout));
+
+        Ok(Command::new("dhclient")
+            .args(&["wlo1"])
+            .output()
+            .map_err(|_| NetworkError::IpAssignFailed)?)
+    }
+
+    fn create_conf_file(&self, content: &str) -> Result<NamedTempFile, Error> {
+        let mut temp_file = NamedTempFile::new()?;
+        write!(temp_file, "{}", content)?;
+
+        Ok(temp_file)
     }
 }
 

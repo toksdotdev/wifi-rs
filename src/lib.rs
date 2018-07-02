@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
 mod connectivity;
-pub use connectivity::profile_network::ProfileNetwork as WiFi;
+pub use connectivity::{profile_network::ProfileNetwork as WiFi, *};
 
 #[cfg(test)]
 mod tests {

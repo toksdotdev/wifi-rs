@@ -1,30 +1,34 @@
-pub mod profile_network;
 mod handlers;
-mod stubs;
+pub mod profile_network;
 mod providers;
+mod stubs;
 
 use std::{fmt, io};
-use std::string::FromUtf8Error;
 
-pub trait Network {
+pub trait Network: fmt::Debug {
     /// Makes an attempt to connect to a selected wireless network with password specified.
     fn connect(&self, password: &str) -> bool;
 }
 
-// Improve upon this.
-impl fmt::Debug for Network {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Network")
-    }
-}
-
+#[derive(Debug)]
 pub enum NetworkType {
     WEP,
     WPA,
     WPA2,
 }
 
-pub enum NetworkTypeParseError {
-    FromUtf8Error(FromUtf8Error),
+#[derive(Debug)]
+pub enum NetworkError {
+    // FromUtf8Error(FromUtf8Error),
+    SsidNotFound,
+    OsNotSupported,
+    IpAssignFailed,
     IoError(io::Error),
+    FailedToConnect(String),
+}
+
+impl From<io::Error> for NetworkError {
+    fn from(error: io::Error) -> Self {
+        NetworkError::IoError(error)
+    }
 }

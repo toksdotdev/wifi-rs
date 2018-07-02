@@ -1,6 +1,4 @@
-use connectivity::providers::{Machine};
-use connectivity::Network;
-use std::io::{Error, ErrorKind};
+use connectivity::{providers::Machine, Network, NetworkError};
 
 #[derive(Debug)]
 pub struct ProfileNetwork {
@@ -9,18 +7,16 @@ pub struct ProfileNetwork {
 
 /// Profile Network handler responsible to connect to a wireless network.
 impl ProfileNetwork {
-    pub fn new(name: &str) -> Result<Self, Error> {
+    pub fn new(name: &str) -> Result<Self, NetworkError> {
         if !(cfg!(target_os = "linux") || cfg!(target_os = "windows")) {
-            return Err(Error::new(
-                ErrorKind::Other,
-                "The Specified OS is not supported",
-            ));
+            return Err(NetworkError::OsNotSupported);
         }
 
         let handler = Machine::new(name)?;
-        return Ok(ProfileNetwork {
+
+        Ok(ProfileNetwork {
             handler: Box::new(handler),
-        });
+        })
     }
 
     pub fn connect(&self, password: &str) -> bool {
