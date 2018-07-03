@@ -1,12 +1,10 @@
 use connectivity::handlers::NetworkXmlProfileHandler;
 use connectivity::{Network, NetworkError};
-
 use std::process::Command;
 
 #[derive(Debug)]
 pub(crate) struct Windows {
     name: String,
-    pub output_xml_path: String,
 }
 
 impl Windows {
@@ -14,7 +12,6 @@ impl Windows {
     pub fn new(name: &str, interface: Option<&str>) -> Self {
         Windows {
             name: String::from(name),
-            output_xml_path: OUTPUT_XML_FILE_PATH.into(),
         }
     }
 
@@ -25,10 +22,7 @@ impl Windows {
             .replace("{SSID}", &self.name)
             .replace("{password}", password);
 
-        // Write details to new xml file
-        let _ = handler
-            .to_file(&self.output_xml_path)
-            .map_err(|err| NetworkError::IoError(err))?;
+        let temp_file = handler.write_to_temp_file()?;
 
         // Add the network profile
         Command::new("netsh")
@@ -36,7 +30,7 @@ impl Windows {
                 "wlan",
                 "add",
                 "profile",
-                &format!("filename={}", self.output_xml_path),
+                &format!("filename={}", temp_file.path().to_str().unwrap()),
             ])
             .output()
             .map_err(|_| NetworkError::AddNetworkProfileFailed)?;
