@@ -47,4 +47,17 @@ impl Network for Linux {
             .as_ref()
             .contains("disconnect"))
     }
+
+    fn is_wifi_enabled(&self) -> bool {
+        let output = Command::new("nmcli").args(&["radio", "wifi"]).output();
+
+        if let Err(_) = output {
+            return false;
+        }
+
+        String::from_utf8_lossy(&output.unwrap().stdout)
+            .replace(" ", "")
+            .replace("\n", "")
+            .contains("enabled")
+    }
 }

@@ -69,4 +69,18 @@ impl Network for Windows {
             .as_ref()
             .contains("disconnect"))
     }
+
+    fn is_wifi_enabled(&self) -> bool {
+        // let output = Command::new("nmcli").args(&["radio", "wifi"]).output();
+
+        // if let Err(_) = output {
+        //     return false;
+        // }
+
+        // match String::from_utf8_lossy(&output.unwrap().stdout).as_ref() {
+        //     "enabled" => true,
+        //     _ => false,
+        // }
+        false
+    }
 }

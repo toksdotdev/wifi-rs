@@ -46,7 +46,7 @@ fn main() -> Result<(), io::Error> {
     let ssid = matches.value_of("ssid").unwrap();
 
     // Get Wireless Interface
-    let ssid = matches.value_of("ssid").unwrap();
+    let interface = matches.value_of("interface").unwrap();
 
     let wifi = WiFi::new(ssid)?;
     println!("Connection Status: {}", wifi.connect(password));

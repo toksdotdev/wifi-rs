@@ -14,7 +14,7 @@ impl ProfileNetwork {
 
         let handler = Machine::new(
             name,
-            config.map_or(None, |cfg| cfg.interface.map_or(None, |x| Some(&x))),
+            config.map_or(None, |cfg| cfg.interface.map_or(None, |x| Some(x))),
         );
 
         Ok(ProfileNetwork {
@@ -23,6 +23,10 @@ impl ProfileNetwork {
     }
 
     pub fn connect(&self, password: &str) -> Result<bool, NetworkError> {
+        if !self.handler.is_wifi_enabled() {
+            return Err(NetworkError::WiFiInterfaceDisabled);
+        }
+
         self.handler.connect(password)
     }
 }

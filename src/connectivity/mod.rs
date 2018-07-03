@@ -9,6 +9,7 @@ pub trait Network: fmt::Debug {
     /// Makes an attempt to connect to a selected wireless network with password specified.
     fn connect(&self, password: &str) -> Result<bool, NetworkError>;
     fn disconnect(&self) -> Result<bool, NetworkError>;
+    fn is_wifi_enabled(&self) -> bool;
 }
 
 // #[derive(Debug)]
@@ -33,6 +34,7 @@ pub enum NetworkError {
     IoError(io::Error),
     FailedToConnect(String),
     FailedToDisconnect(String),
+    WiFiInterfaceDisabled,
 }
 
 impl From<io::Error> for NetworkError {

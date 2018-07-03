@@ -6,7 +6,7 @@ fn main() -> Result<(), NetworkError> {
         interface: Some("wlo1"),
     });
 
-    let wifi = WiFi::new("AndroidAPSD", config)?;
+    let wifi = WiFi::new("AndroidAPSD22", config)?;
 
     match wifi.connect("belm4235") {
         Ok(result) => println!(
