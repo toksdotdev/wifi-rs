@@ -48,8 +48,6 @@ fn main() -> Result<(), NetworkError> {
 
     Ok(())
 }
-
-}
 ```
 
 ## To do
@@ -58,7 +56,7 @@ fn main() -> Result<(), NetworkError> {
 - [x] Add support for Windows
 - [x] Add support for linux
 - [x] Add disconnect feature
-- [ ] Use `tempfile` crate on windows to generate windows profile temporary file.
+- [x] Use `tempfile` crate on windows to generate windows profile temporary file.
 - [ ] Add support for OSX
 - [ ] Fix the implementation for `check_if_wifi_is_enabled` for windows.
 - [ ] Add get network type feature
