@@ -1,5 +1,5 @@
 use connectivity::handlers::NetworkXmlProfileHandler;
-use connectivity::{Network, NetworkError};
+use connectivity::{Network, WifiConnectionError};
 use std::process::Command;
 
 #[derive(Debug)]
@@ -15,7 +15,7 @@ impl Windows {
         }
     }
 
-    pub(crate) fn add_profile(&self, password: &str) -> Result<(), NetworkError> {
+    pub(crate) fn add_profile(&self, password: &str) -> Result<(), WifiConnectionError> {
         let mut handler = NetworkXmlProfileHandler::new();
         handler.content = handler
             .content
@@ -33,31 +33,31 @@ impl Windows {
                 &format!("filename={}", temp_file.path().to_str().unwrap()),
             ])
             .output()
-            .map_err(|_| NetworkError::AddNetworkProfileFailed)?;
+            .map_err(|_| WifiConnectionError::AddNetworkProfileFailed)?;
 
         Ok(())
     }
 }
 
 impl Network for Windows {
-    fn connect(&self, password: &str) -> Result<bool, NetworkError> {
+    fn connect(&self, password: &str) -> Result<bool, WifiConnectionError> {
         self.add_profile(password)?;
 
         let output = Command::new("netsh")
             .args(&["wlan", "connect", &format!("name={}", self.name)])
             .output()
-            .map_err(|err| NetworkError::FailedToConnect(format!("{}", err)))?;
+            .map_err(|err| WifiConnectionError::FailedToConnect(format!("{}", err)))?;
 
         Ok(String::from_utf8_lossy(&output.stdout)
             .as_ref()
             .contains("successfully activated"))
     }
 
-    fn disconnect(&self) -> Result<bool, NetworkError> {
+    fn disconnect(&self) -> Result<bool, WifiConnectionError> {
         let output = Command::new("netsh")
             .args(&["wlan", "disconnect"])
             .output()
-            .map_err(|err| NetworkError::FailedToDisconnect(format!("{}", err)))?;
+            .map_err(|err| WifiConnectionError::FailedToDisconnect(format!("{}", err)))?;
 
         Ok(String::from_utf8_lossy(&output.stdout)
             .as_ref()
@@ -65,16 +65,14 @@ impl Network for Windows {
     }
 
     fn is_wifi_enabled(&self) -> bool {
-        // let output = Command::new("nmcli").args(&["radio", "wifi"]).output();
+        unimplemented!()
+    }
 
-        // if let Err(_) = output {
-        //     return false;
-        // }
+    fn connnection_up(&self) -> bool {
+        unimplemented!()
+    }
 
-        // match String::from_utf8_lossy(&output.unwrap().stdout).as_ref() {
-        //     "enabled" => true,
-        //     _ => false,
-        // }
-        false
+    fn connnection_down(&self) -> bool {
+        unimplemented!()
     }
 }

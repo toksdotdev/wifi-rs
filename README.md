@@ -25,9 +25,9 @@ Note that only **open**, **WEP** and **WPA-PSK** networks are supported at the m
 
 ```RUST
 extern crate wifi_rs;
-use wifi_rs::{WiFi, Config, NetworkError};
+use wifi_rs::{WiFi, Config, WifiConnectionError};
 
-fn main() -> Result<(), NetworkError> {
+fn main() -> Result<(), WifiConnectionError> {
     let config = Some(Config {
         interface: Some("wlo1"), // interface : None would default to `wlan0`.
     });

@@ -1,4 +1,4 @@
-use connectivity::{Network, NetworkError};
+use connectivity::{Network, WifiConnectionError};
 use std::process::Command;
 
 #[derive(Debug)]
@@ -17,7 +17,7 @@ impl Linux {
 }
 
 impl Network for Linux {
-    fn connect(&self, password: &str) -> Result<bool, NetworkError> {
+    fn connect(&self, password: &str) -> Result<bool, WifiConnectionError> {
         let output = Command::new("nmcli")
             .args(&[
                 "d",
@@ -30,18 +30,18 @@ impl Network for Linux {
                 &self.interface,
             ])
             .output()
-            .map_err(|err| NetworkError::FailedToConnect(format!("{}", err)))?;
+            .map_err(|err| WifiConnectionError::FailedToConnect(format!("{}", err)))?;
 
         Ok(String::from_utf8_lossy(&output.stdout)
             .as_ref()
             .contains("successfully activated"))
     }
 
-    fn disconnect(&self) -> Result<bool, NetworkError> {
+    fn disconnect(&self) -> Result<bool, WifiConnectionError> {
         let output = Command::new("nmcli")
             .args(&["d", "disconnect", "ifname", &self.interface])
             .output()
-            .map_err(|err| NetworkError::FailedToDisconnect(format!("{}", err)))?;
+            .map_err(|err| WifiConnectionError::FailedToDisconnect(format!("{}", err)))?;
 
         Ok(String::from_utf8_lossy(&output.stdout)
             .as_ref()
@@ -59,5 +59,29 @@ impl Network for Linux {
             .replace(" ", "")
             .replace("\n", "")
             .contains("enabled")
+    }
+
+    fn connnection_up(&self) -> bool {
+        let output = Command::new("nmcli")
+            .args(&["radio", "wifi", "on"])
+            .output();
+
+        if let Err(_) = output {
+            return false;
+        }
+
+        false
+    }
+
+    fn connnection_down(&self) -> bool {
+        let output = Command::new("nmcli")
+            .args(&["radio", "wifi", "off"])
+            .output();
+
+        if let Err(_) = output {
+            return false;
+        }
+
+        false
     }
 }

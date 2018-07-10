@@ -1,7 +1,7 @@
 mod connectivity;
-pub use connectivity::{profile_network::ProfileNetwork as WiFi, Config, NetworkError};
+pub use connectivity::{profile_network::ProfileNetwork as WiFi, Config, WifiConnectionError};
 
-fn main() -> Result<(), NetworkError> {
+fn main() -> Result<(), WifiConnectionError> {
     let config = Some(Config {
         interface: Some("wlo1"),
     });
