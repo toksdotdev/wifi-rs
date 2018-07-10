@@ -15,6 +15,9 @@ pub trait Network: fmt::Debug {
     fn is_wifi_enabled(&self) -> bool;
     fn connnection_up(&self) -> bool;
     fn connnection_down(&self) -> bool;
+
+    // Hotspot
+    // fn create_hotspot(&self, ssid: &str, password: &str) -> Result<bool, WifiHotspotError>;
 }
 
 // #[derive(Debug)]
@@ -39,6 +42,10 @@ pub enum WifiConnectionError {
     FailedToConnect(String),
     FailedToDisconnect(String),
     WiFiInterfaceDisabled,
+}
+
+pub enum WifiHotspotError {
+    CreationFailed,
 }
 
 impl From<io::Error> for WifiConnectionError {
