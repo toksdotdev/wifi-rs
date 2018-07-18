@@ -1,15 +1,11 @@
 use connectivity::handlers::NetworkXmlProfileHandler;
 use connectivity::{Network, WifiConnectionError};
+use platforms::Windows;
 use std::process::Command;
-
-#[derive(Debug)]
-pub(crate) struct Windows {
-    name: String,
-}
 
 impl Windows {
     #[cfg(target_os = "windows")]
-    pub fn new(name: &str, interface: Option<&str>) -> Self {
+    pub fn new(name: &str, _interface: Option<&str>) -> Self {
         Windows {
             name: String::from(name),
         }
@@ -62,17 +58,5 @@ impl Network for Windows {
         Ok(String::from_utf8_lossy(&output.stdout)
             .as_ref()
             .contains("disconnect"))
-    }
-
-    fn is_wifi_enabled(&self) -> bool {
-        unimplemented!()
-    }
-
-    fn connnection_up(&self) -> bool {
-        unimplemented!()
-    }
-
-    fn connnection_down(&self) -> bool {
-        unimplemented!()
     }
 }

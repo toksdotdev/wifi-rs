@@ -1,29 +1,15 @@
 use connectivity::{Network, WifiConnectionError};
+use platforms::{Connection, Linux};
 use std::process::Command;
 
-#[derive(Debug)]
-pub struct Linux {
-    pub name: String,
-    interface: String,
-}
-
-impl Linux {
-    pub fn new(name: &str, interface: Option<&str>) -> Self {
-        Linux {
-            name: name.into(),
-            interface: interface.unwrap_or("wlan0").into(),
-        }
-    }
-}
-
 impl Network for Linux {
-    fn connect(&self, password: &str) -> Result<bool, WifiConnectionError> {
+    fn connect(&mut self, ssid: &str, password: &str) -> Result<bool, WifiConnectionError> {
         let output = Command::new("nmcli")
             .args(&[
                 "d",
                 "wifi",
                 "connect",
-                &self.name,
+                ssid,
                 "password",
                 &password,
                 "ifname",
@@ -32,9 +18,18 @@ impl Network for Linux {
             .output()
             .map_err(|err| WifiConnectionError::FailedToConnect(format!("{}", err)))?;
 
-        Ok(String::from_utf8_lossy(&output.stdout)
+        if !String::from_utf8_lossy(&output.stdout)
             .as_ref()
-            .contains("successfully activated"))
+            .contains("successfully activated")
+        {
+            return Ok(false);
+        }
+
+        self.connection = Some(Connection {
+            ssid: String::from(ssid),
+        });
+
+        Ok(true)
     }
 
     fn disconnect(&self) -> Result<bool, WifiConnectionError> {
@@ -46,42 +41,5 @@ impl Network for Linux {
         Ok(String::from_utf8_lossy(&output.stdout)
             .as_ref()
             .contains("disconnect"))
-    }
-
-    fn is_wifi_enabled(&self) -> bool {
-        let output = Command::new("nmcli").args(&["radio", "wifi"]).output();
-
-        if let Err(_) = output {
-            return false;
-        }
-
-        String::from_utf8_lossy(&output.unwrap().stdout)
-            .replace(" ", "")
-            .replace("\n", "")
-            .contains("enabled")
-    }
-
-    fn connnection_up(&self) -> bool {
-        let output = Command::new("nmcli")
-            .args(&["radio", "wifi", "on"])
-            .output();
-
-        if let Err(_) = output {
-            return false;
-        }
-
-        false
-    }
-
-    fn connnection_down(&self) -> bool {
-        let output = Command::new("nmcli")
-            .args(&["radio", "wifi", "off"])
-            .output();
-
-        if let Err(_) = output {
-            return false;
-        }
-
-        false
     }
 }

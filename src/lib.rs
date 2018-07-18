@@ -1,7 +1,11 @@
 #![allow(dead_code)]
 
 mod connectivity;
-pub use connectivity::{profile_network::ProfileNetwork as WiFi, Config};
+mod hotspot;
+mod platforms;
+
+pub use connectivity::{Config, *};
+pub use hotspot::*;
 
 #[cfg(test)]
 mod tests {
@@ -9,12 +13,12 @@ mod tests {
 
     #[test]
     fn connect_to_wifi_failed() {
-        let config = Some(Config {
-            interface: Some("wlo1"),
-        });
+        // let config = Some(Config {
+        //     interface: Some("wlo1"),
+        // });
 
-        let wifi = WiFi::new("hello", config).unwrap();
+        // let wifi = WiFi::new("hello", config).unwrap();
 
-        assert_eq!(wifi.connect("password").unwrap(), false);
+        // assert_eq!(wifi.connect("password").unwrap(), false);
     }
 }
