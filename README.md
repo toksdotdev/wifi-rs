@@ -25,16 +25,17 @@ Note that only **open**, **WEP** and **WPA-PSK** networks are supported at the m
 
 ```RUST
 extern crate wifi_rs;
-use wifi_rs::{WiFi, Config, WifiConnectionError};
+use wifi_rs::prelude::*;
+use wifi_rs::{WiFi, Config};
 
 fn main() -> Result<(), WifiConnectionError> {
     let config = Some(Config {
-        interface: Some("wlo1"), // interface : None would default to `wlan0`.
+        interface: Some("wlo1"),
     });
 
-    let wifi = WiFi::new("AndroidAPSD", config)?;
+    let mut wifi = WiFi::new(config);
 
-    match wifi.connect("belm4235") {
+    match wifi.connect("AndroidAPSD22", "belm4235") {
         Ok(result) => println!(
             "{}",
             if result == true {
@@ -47,7 +48,6 @@ fn main() -> Result<(), WifiConnectionError> {
     }
 
     Ok(())
-}
 ```
 
 ## Features
