@@ -1,10 +1,8 @@
 #[cfg(target_os = "windows")]
 mod handlers;
-
+mod providers;
 #[cfg(target_os = "windows")]
 mod stubs;
-
-mod providers;
 
 use platforms::WifiError;
 use std::{fmt, io};
@@ -17,20 +15,17 @@ pub trait Network: fmt::Debug {
     fn disconnect(&self) -> Result<bool, WifiConnectionError>;
 }
 
-/// Configuration for a wifi network.
-#[derive(Debug, Clone)]
-pub struct Config<'a> {
-    pub interface: Option<&'a str>,
-}
-
 #[derive(Debug)]
 pub enum WifiConnectionError {
-    SsidNotFound,
-    IpAssignFailed,
+    // SsidNotFound,
+    // IpAssignFailed,
+    #[cfg(target_os = "windows")]
     AddNetworkProfileFailed,
     FailedToConnect(String),
     FailedToDisconnect(String),
-    Other { kind: WifiError },
+    Other {
+        kind: WifiError,
+    },
 }
 
 impl From<io::Error> for WifiConnectionError {

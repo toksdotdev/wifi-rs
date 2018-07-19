@@ -1,22 +1,26 @@
+use platforms::{WifiError, WifiInterface};
 use std::collections::HashMap;
-use 
+
+#[derive(Debug)]
+pub struct Connection {
+    pub(crate) ssid: String,
+}
 
 #[derive(Debug)]
 pub struct Windows {
-    hotspot: Option<HashMap>,
-    connectivity: Option<HashMap>,
+    pub(crate) connection: Option<Connection>,
+    pub(crate) interface: String,
 }
 
-impl WifiInterface for Windows {
-    fn is_wifi_enabled() -> bool {
-        unimplemented!()
-    }
-
-    fn turn_on() -> Result<bool, WifiError> {
-        unimplemented!()
-    }
-
-    fn turn_off() -> Result<bool, WifiError> {
-        unimplemented!()
+impl Windows {
+    pub fn new(name: &str, config: Option<Config>) -> Self {
+        Windows {
+            connection: None,
+            interface: config.map_or("wlan0".to_string(), |cfg| {
+                cfg.interface.unwrap_or("wlan0").to_string()
+            }),
+        }
     }
 }
+
+impl WifiInterface for Windows {}

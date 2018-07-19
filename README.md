@@ -50,20 +50,35 @@ fn main() -> Result<(), WifiConnectionError> {
 }
 ```
 
-## To do
+## Features
 
-- [x] Bundle windows profile sample as literals
-- [x] Add support for Windows
-- [x] Add support for linux
-- [x] Add disconnect feature
+### Windows
+- [x] Support for Windows.
+- [x] Bundle windows profile sample as literals.
+- [x] Add hotspot functionality.
 - [x] Use `tempfile` crate on windows to generate windows profile temporary file.
-- [ ] Add support for OSX
+- [ ] Add get network type feature.
 - [ ] Fix the implementation for `check_if_wifi_is_enabled` for windows.
-- [ ] Add get network type feature
-- [ ] Add create hotspot functionality
-- [ ] Write documentation
-- [ ] Write tests
-- [ ] Add multi-threaded support
+- [ ] Add implementation for WifiInterface trait.
+
+
+### Linux
+- [x] Support for linux.
+- [x] Add disconnect feature.
+- [ ] Add hotspot functionality.
+- [ ] Add get network type feature.
+
+### OsX
+- [x] Add support for OSX.
+- [ ] Add get network type feature.
+- [ ] Add hotspot functionality.
+
+### General
+- [x] Return detailed error messages.
+- [ ] Write documentation. **(approx. percentage: 20%)**
+- [ ] Update `wifi-CLI` with recent updates.
+- [ ] Write tests.
+- [ ] Add multi-threaded support.
 
 # Contribution
 

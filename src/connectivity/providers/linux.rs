@@ -1,9 +1,15 @@
 use connectivity::{Network, WifiConnectionError};
-use platforms::{Connection, Linux};
+use platforms::{Connection, WiFi, WifiError, WifiInterface};
 use std::process::Command;
 
-impl Network for Linux {
+impl Network for WiFi {
     fn connect(&mut self, ssid: &str, password: &str) -> Result<bool, WifiConnectionError> {
+        if !WiFi::is_wifi_enabled().map_err(|err| WifiConnectionError::Other { kind: err })? {
+            return Err(WifiConnectionError::Other {
+                kind: WifiError::InterfaceDisabled,
+            });
+        }
+
         let output = Command::new("nmcli")
             .args(&[
                 "d",

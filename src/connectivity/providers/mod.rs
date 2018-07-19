@@ -4,5 +4,5 @@ mod linux;
 #[cfg(target_os = "osx")]
 mod osx;
 
-// #[cfg(target_os = "windows")]
+#[cfg(target_os = "windows")]
 mod windows;

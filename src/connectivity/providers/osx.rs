@@ -1,40 +1,40 @@
 use connectivity::{Network, WifiConnectionError};
+use platforms::{Connection, WiFi, WifiError, WifiInterface};
 use std::process::Command;
 
-#[derive(Debug)]
-pub struct OSX {
-    pub name: String,
-    interface: String,
-}
-
-impl OSX {
-    #[cfg(target_os = "windows")]
-    pub fn new(name: &str, interface: Option<&str>) -> Self {
-        OSX {
-            name: name.into(),
-            interface: interface.unwrap_or("en0").into(),
+impl Network for WiFi {
+    fn connect(&mut self, ssid: &str, password: &str) -> Result<bool, WifiConnectionError> {
+        if !WiFi::is_wifi_enabled().map_err(|err| WifiConnectionError::Other { kind: err })? {
+            return Err(WifiConnectionError::Other {
+                kind: WifiError::InterfaceDisabled,
+            });
         }
-    }
-}
 
-impl Network for OSX {
-    fn connect(&self, password: &str) -> Result<bool, WifiConnectionError> {
         let output = Command::new("networksetup")
-            .args(&["-setairportnetwork", &self.interface, &self.name, &password])
+            .args(&["-setairportnetwork", &self.interface, &ssid, &password])
             .output()
             .map_err(|err| WifiConnectionError::FailedToConnect(format!("{}", err)))?;
 
-        Ok(String::from_utf8_lossy(&output.stdout)
+        if !String::from_utf8_lossy(&output.stdout)
             .as_ref()
-            .contains("successfully activated"))
+            .contains("successfully activated")
+        {
+            return Ok(false);
+        }
+
+        self.connection = Some(Connection {
+            ssid: String::from(ssid),
+        });
+
+        Ok(true)
     }
 
     fn disconnect(&self) -> Result<bool, WifiConnectionError> {
         let output = Command::new("networksetup")
             .args(&[
                 "-removepreferredwirelessnetwork",
-                &self.interface,
-                &self.name,
+                &*self.interface,
+                &*self.connection.as_ref().unwrap().ssid,
             ])
             .output()
             .map_err(|err| WifiConnectionError::FailedToDisconnect(format!("{}", err)))?;
@@ -42,44 +42,5 @@ impl Network for OSX {
         Ok(String::from_utf8_lossy(&output.stdout)
             .as_ref()
             .contains("disconnect"))
-    }
-
-    fn is_wifi_enabled(&self) -> bool {
-        let output = Command::new("networksetup")
-            .args(&["radio", "wifi"])
-            .output();
-
-        if let Err(_) = output {
-            return false;
-        }
-
-        String::from_utf8_lossy(&output.unwrap().stdout)
-            .replace(" ", "")
-            .replace("\n", "")
-            .contains("enabled")
-    }
-
-    fn connnection_up(&self) -> bool {
-        let output = Command::new("networksetup")
-            .args(&["-setairportpower", &self.interface, "on"])
-            .output();
-
-        if let Err(_) = output {
-            return false;
-        }
-
-        false
-    }
-
-    fn connnection_down(&self) -> bool {
-        let output = Command::new("networksetup")
-            .args(&["-setairportpower", &self.interface, "off"])
-            .output();
-
-        if let Err(_) = output {
-            return false;
-        }
-
-        false
     }
 }

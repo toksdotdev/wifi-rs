@@ -2,15 +2,10 @@ use connectivity::handlers::NetworkXmlProfileHandler;
 use connectivity::{
     Network, WifiConnectionError, WifiError, WifiHotspot, WifiHotspotError, WifiInterface,
 };
-use platforms::Windows;
+use platforms::WiFi;
 use std::process::Command;
 
-// #[derive(Debug)]
-// pub(crate) struct Windows {
-//     name: String,
-// }
-
-impl WifiHotspot for Windows {
+impl WifiHotspot for WiFi {
     fn create_hotspot(ssid: &str, password: &str) -> Result<bool, WifiHotspotError> {
         let output = Command::new("netsh")
             .args(&[

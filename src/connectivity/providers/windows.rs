@@ -1,21 +1,14 @@
 use connectivity::handlers::NetworkXmlProfileHandler;
 use connectivity::{Network, WifiConnectionError};
-use platforms::Windows;
+use platforms::{Connection, WiFi, WifiError, WifiInterface};
 use std::process::Command;
 
-impl Windows {
-    #[cfg(target_os = "windows")]
-    pub fn new(name: &str, _interface: Option<&str>) -> Self {
-        Windows {
-            name: String::from(name),
-        }
-    }
-
-    pub(crate) fn add_profile(&self, password: &str) -> Result<(), WifiConnectionError> {
+impl WiFi {
+    fn add_profile(ssid: &str, password: &str) -> Result<(), WifiConnectionError> {
         let mut handler = NetworkXmlProfileHandler::new();
         handler.content = handler
             .content
-            .replace("{SSID}", &self.name)
+            .replace("{SSID}", ssid)
             .replace("{password}", password);
 
         let temp_file = handler.write_to_temp_file()?;
@@ -36,17 +29,36 @@ impl Windows {
 }
 
 impl Network for Windows {
-    fn connect(&self, password: &str) -> Result<bool, WifiConnectionError> {
-        self.add_profile(password)?;
+    fn connect(&mut self, ssid: &str, password: &str) -> Result<bool, WifiConnectionError> {
+        if !WiFi::is_wifi_enabled().map_err(|err| WifiConnectionError::Other { kind: err })? {
+            return Err(WifiConnectionError::Other {
+                kind: WifiError::InterfaceDisabled,
+            });
+        }
+
+        Self::add_profile(ssid, password)?;
 
         let output = Command::new("netsh")
-            .args(&["wlan", "connect", &format!("name={}", self.name)])
+            .args(&[
+                "wlan",
+                "connect",
+                &format!("name={}", *self.connection.unwrap().ssid),
+            ])
             .output()
             .map_err(|err| WifiConnectionError::FailedToConnect(format!("{}", err)))?;
 
-        Ok(String::from_utf8_lossy(&output.stdout)
+        if !String::from_utf8_lossy(&output.stdout)
             .as_ref()
-            .contains("successfully activated"))
+            .contains("successfully activated")
+        {
+            return Ok(false);
+        }
+
+        self.connection = Some(Connection {
+            ssid: String::from(ssid),
+        });
+
+        Ok(true)
     }
 
     fn disconnect(&self) -> Result<bool, WifiConnectionError> {

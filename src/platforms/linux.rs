@@ -1,58 +1,56 @@
-use platforms::{WifiError, WifiInterface};
-use std::collections::HashMap;
+use platforms::{Config, WifiError, WifiInterface};
 use std::process::Command;
 
 #[derive(Debug)]
-pub(crate) struct Connection {
-    pub ssid: String,
+pub struct Connection {
+    pub(crate) ssid: String,
 }
 
 #[derive(Debug)]
-pub(crate) struct Linux {
-    hotspot: Option<HashMap<String, String>>,
-    pub connection: Option<Connection>,
-    pub interface: String,
+pub struct Linux {
+    pub(crate) connection: Option<Connection>,
+    pub(crate) interface: String,
 }
 
 impl Linux {
-    pub fn new(name: &str, interface: Option<&str>) -> Self {
+    pub fn new(config: Option<Config>) -> Self {
         Linux {
-            hotspot: None,
             connection: None,
-            interface: String::from("wlan0"),
+            interface: config.map_or("wlan0".to_string(), |cfg| {
+                cfg.interface.unwrap_or("wlan0").to_string()
+            }),
         }
     }
 }
 
 impl WifiInterface for Linux {
-    fn is_wifi_enabled() -> bool {
-        let output = Command::new("nmcli").args(&["radio", "wifi"]).output();
+    fn is_wifi_enabled() -> Result<bool, WifiError> {
+        let output = Command::new("nmcli")
+            .args(&["radio", "wifi"])
+            .output()
+            .map_err(|err| WifiError::IoError(err))?;
 
-        if let Err(_) = output {
-            return false;
-        }
-
-        String::from_utf8_lossy(&output.unwrap().stdout)
+        Ok(String::from_utf8_lossy(&output.stdout)
             .replace(" ", "")
             .replace("\n", "")
-            .contains("enabled")
+            .contains("enabled"))
     }
 
-    fn turn_on() -> Result<bool, WifiError> {
+    fn turn_on() -> Result<(), WifiError> {
         let _output = Command::new("nmcli")
             .args(&["radio", "wifi", "on"])
             .output()
             .map_err(|err| WifiError::IoError(err))?;
 
-        Ok(true)
+        Ok(())
     }
 
-    fn turn_off() -> Result<bool, WifiError> {
+    fn turn_off() -> Result<(), WifiError> {
         let _output = Command::new("nmcli")
             .args(&["radio", "wifi", "off"])
             .output()
             .map_err(|err| WifiError::IoError(err))?;
 
-        Ok(true)
+        Ok(())
     }
 }
