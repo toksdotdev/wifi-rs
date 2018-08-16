@@ -1,32 +1,54 @@
 mod providers;
 
+use self::providers::prelude::HotspotConfig;
 use platforms::{WifiError, WifiInterface};
-use std::fmt;
+use std::{fmt, io};
 
+/// Error that might occur when interacting managing wireless hotspot.
 #[derive(Debug)]
 pub enum WifiHotspotError {
+  /// Failed to ceate wireless hotspot.
   CreationFailed,
+  /// Failed to stop wireless hotspot service. Try turning off
+  /// the wireless interface via ```wifi.turn_off()```.
+  FailedToStop(io::Error),
+  /// A wireless interface error occurred.
   Other { kind: WifiError },
 }
 
-/// Adds support for wifi hotspot functionality
+/// Wireless hotspot functionality for a wifi interface.
 pub trait WifiHotspot: fmt::Debug + WifiInterface {
-  /// Creates wifi hotspot service for host machine. This only creats the wifi network,
+  /// Creates wireless hotspot service for host machine. This only creates the wifi network,
   /// and isn't responsible for initiating the serving of the wifi network process.
   /// To begin serving the hotspot, use ```start_hotspot()```.
-  fn create_hotspot(ssid: &str, password: &str) -> Result<bool, WifiHotspotError> {
+  fn create_hotspot(
+    &mut self,
+    ssid: &str,
+    password: &str,
+    configuration: Option<&HotspotConfig>,
+  ) -> Result<bool, WifiHotspotError> {
+    let _a = ssid;
+    let _b = password;
+    let _c = configuration;
+
     unimplemented!();
   }
 
-  /// Start serving publicly an already created wifi hotspot.
+  /// Start serving publicly an already created wireless hotspot.
   fn start_hotspot() -> Result<bool, WifiHotspotError> {
     unimplemented!();
   }
 
-  /// Stop serving a wifi network.
+  /// Stop serving a wireless network.
   ///
-  /// > All users connected will automatically be disconnected.
-  fn stop_hotspot() -> Result<bool, WifiHotspotError> {
+  /// **NOTE: All users connected will automatically be disconnected.**
+  fn stop_hotspot(&mut self) -> Result<bool, WifiHotspotError> {
     unimplemented!();
+  }
+}
+
+impl From<WifiError> for WifiHotspotError {
+  fn from(error: WifiError) -> Self {
+    WifiHotspotError::Other { kind: error }
   }
 }

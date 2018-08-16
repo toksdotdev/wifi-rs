@@ -1,11 +1,14 @@
-use platforms::{WifiError, WifiInterface};
-use std::collections::HashMap;
+use platforms::Config;
+// use platforms::WifiError;
+use platforms::WifiInterface;
+// use std::process::Command;
 
 #[derive(Debug)]
 pub struct Connection {
     pub(crate) ssid: String,
 }
 
+/// Wireless network interface for windows operating system.
 #[derive(Debug)]
 pub struct Windows {
     pub(crate) connection: Option<Connection>,
@@ -13,7 +16,7 @@ pub struct Windows {
 }
 
 impl Windows {
-    pub fn new(name: &str, config: Option<Config>) -> Self {
+    pub fn new(config: Option<Config>) -> Self {
         Windows {
             connection: None,
             interface: config.map_or("wlan0".to_string(), |cfg| {
@@ -23,4 +26,6 @@ impl Windows {
     }
 }
 
+/// Wifi interface for windows operating system.
+/// This provides basic functionalities for wifi interface.
 impl WifiInterface for Windows {}

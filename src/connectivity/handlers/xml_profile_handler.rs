@@ -4,17 +4,21 @@ use self::tempfile::NamedTempFile;
 use connectivity::stubs::windows_wifi_profile;
 use std::{io, io::Write};
 
+/// A netowork XML handler for windows, responsible creating
+/// disposable xml profiles files.
 pub(crate) struct NetworkXmlProfileHandler {
     pub content: String,
 }
 
 impl NetworkXmlProfileHandler {
+    /// Create a new xml profile handler for windows.
     pub fn new() -> Self {
         NetworkXmlProfileHandler {
             content: NetworkXmlProfileHandler::read_from_stub(),
         }
     }
 
+    /// Generate a sample templated xml profile.
     pub fn read_from_stub() -> String {
         windows_wifi_profile::get_wifi_profile()
     }

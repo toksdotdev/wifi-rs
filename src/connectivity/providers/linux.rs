@@ -1,12 +1,14 @@
-use connectivity::{Network, WifiConnectionError};
+use connectivity::{Connectivity, WifiConnectionError};
 use platforms::{Connection, WiFi, WifiError, WifiInterface};
 use std::process::Command;
 
-impl Network for WiFi {
+/// Wireless network connectivity functionality.
+impl Connectivity for WiFi {
+    /// Attempts to connect to a wireless network with a given SSID and password.
     fn connect(&mut self, ssid: &str, password: &str) -> Result<bool, WifiConnectionError> {
         if !WiFi::is_wifi_enabled().map_err(|err| WifiConnectionError::Other { kind: err })? {
             return Err(WifiConnectionError::Other {
-                kind: WifiError::InterfaceDisabled,
+                kind: WifiError::WifiDisabled,
             });
         }
 
@@ -38,6 +40,7 @@ impl Network for WiFi {
         Ok(true)
     }
 
+    /// Attempts to disconnect from a wireless network currently connected to.
     fn disconnect(&self) -> Result<bool, WifiConnectionError> {
         let output = Command::new("nmcli")
             .args(&["d", "disconnect", "ifname", &self.interface])

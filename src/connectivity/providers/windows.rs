@@ -1,9 +1,11 @@
 use connectivity::handlers::NetworkXmlProfileHandler;
-use connectivity::{Network, WifiConnectionError};
+use connectivity::{Connectivity, WifiConnectionError};
 use platforms::{Connection, WiFi, WifiError, WifiInterface};
 use std::process::Command;
 
 impl WiFi {
+    /// Add the wireless network profile of network to connect to,
+    /// (this is specific to windows operating system).
     fn add_profile(ssid: &str, password: &str) -> Result<(), WifiConnectionError> {
         let mut handler = NetworkXmlProfileHandler::new();
         handler.content = handler
@@ -13,7 +15,6 @@ impl WiFi {
 
         let temp_file = handler.write_to_temp_file()?;
 
-        // Add the network profile
         Command::new("netsh")
             .args(&[
                 "wlan",
@@ -28,11 +29,13 @@ impl WiFi {
     }
 }
 
-impl Network for Windows {
+/// Wireless network connectivity functionality.
+impl Connectivity for WiFi {
+    /// Attempts to connect to a wireless network with a given SSID and password.
     fn connect(&mut self, ssid: &str, password: &str) -> Result<bool, WifiConnectionError> {
         if !WiFi::is_wifi_enabled().map_err(|err| WifiConnectionError::Other { kind: err })? {
             return Err(WifiConnectionError::Other {
-                kind: WifiError::InterfaceDisabled,
+                kind: WifiError::WifiDisabled,
             });
         }
 
@@ -61,6 +64,7 @@ impl Network for Windows {
         Ok(true)
     }
 
+    /// Attempts to disconnect from a wireless network currently connected to.
     fn disconnect(&self) -> Result<bool, WifiConnectionError> {
         let output = Command::new("netsh")
             .args(&["wlan", "disconnect"])

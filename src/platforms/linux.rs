@@ -6,6 +6,7 @@ pub struct Connection {
     pub(crate) ssid: String,
 }
 
+/// Wireless network interface for linux operating system.
 #[derive(Debug)]
 pub struct Linux {
     pub(crate) connection: Option<Connection>,
@@ -23,6 +24,8 @@ impl Linux {
     }
 }
 
+/// Wifi interface for linux operating system.
+/// This provides basic functionalities for wifi interface.
 impl WifiInterface for Linux {
     fn is_wifi_enabled() -> Result<bool, WifiError> {
         let output = Command::new("nmcli")

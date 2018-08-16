@@ -7,7 +7,8 @@ mod stubs;
 use platforms::WifiError;
 use std::{fmt, io};
 
-pub trait Network: fmt::Debug {
+/// Wireless network connectivity functionality.
+pub trait Connectivity: fmt::Debug {
     /// Makes an attempt to connect to a selected wireless network with password specified.
     fn connect(&mut self, ssid: &str, password: &str) -> Result<bool, WifiConnectionError>;
 
@@ -15,17 +16,19 @@ pub trait Network: fmt::Debug {
     fn disconnect(&self) -> Result<bool, WifiConnectionError>;
 }
 
+/// Error that occurs when attempting to connect to a wireless network.
 #[derive(Debug)]
 pub enum WifiConnectionError {
-    // SsidNotFound,
-    // IpAssignFailed,
+    /// Adding the newtork profile failed.
     #[cfg(target_os = "windows")]
     AddNetworkProfileFailed,
+    /// Failed to connect to wireless network.
     FailedToConnect(String),
+    /// Failed to disconnect from wireless network. Try turning the wireless interface down.
     FailedToDisconnect(String),
-    Other {
-        kind: WifiError,
-    },
+    /// A wireless error occurred.
+    Other { kind: WifiError },
+    // SsidNotFound,
 }
 
 impl From<io::Error> for WifiConnectionError {

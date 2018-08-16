@@ -2,7 +2,7 @@ mod connectivity;
 mod hotspot;
 mod platforms;
 
-use connectivity::{Network, WifiConnectionError};
+use connectivity::{Connectivity, WifiConnectionError};
 use platforms::{Config, WiFi};
 
 fn main() -> Result<(), WifiConnectionError> {

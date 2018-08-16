@@ -6,6 +6,7 @@ pub struct Connection {
     pub(crate) ssid: String,
 }
 
+/// Wireless network interface for mac operating system.
 #[derive(Debug)]
 pub struct Osx {
     pub(crate) connection: Option<Connection>,
@@ -23,6 +24,8 @@ impl Osx {
     }
 }
 
+/// Wifi interface for osx operating system.
+/// This provides basic functionalities for wifi interface.
 impl WifiInterface for Osx {
     fn is_wifi_enabled() -> Result<bool, WifiError> {
         let output = Command::new("networksetup")
