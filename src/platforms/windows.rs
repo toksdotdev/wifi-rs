@@ -43,10 +43,7 @@ impl WifiInterface for Windows {
             .output()
             .map_err(|err| WifiError::IoError(err))?;
 
-        Ok(String::from_utf8_lossy(&output.stdout)
-            .replace(" ", "")
-            .replace("\n", "")
-            .contains("enabled"))
+        Ok(!String::from_utf8_lossy(&output.stdout).contains("disconnected"))
     }
 
     /// Turn on the wireless network adapter.
