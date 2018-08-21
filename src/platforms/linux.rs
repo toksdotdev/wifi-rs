@@ -27,6 +27,7 @@ impl Linux {
 /// Wifi interface for linux operating system.
 /// This provides basic functionalities for wifi interface.
 impl WifiInterface for Linux {
+    /// Check if wireless network adapter is enabled.
     fn is_wifi_enabled() -> Result<bool, WifiError> {
         let output = Command::new("nmcli")
             .args(&["radio", "wifi"])
@@ -39,6 +40,7 @@ impl WifiInterface for Linux {
             .contains("enabled"))
     }
 
+    /// Turn on the wireless network adapter.
     fn turn_on() -> Result<(), WifiError> {
         let _output = Command::new("nmcli")
             .args(&["radio", "wifi", "on"])
@@ -48,6 +50,7 @@ impl WifiInterface for Linux {
         Ok(())
     }
 
+    /// Turn off the wireless network adapter.
     fn turn_off() -> Result<(), WifiError> {
         let _output = Command::new("nmcli")
             .args(&["radio", "wifi", "off"])

@@ -2,14 +2,14 @@
 mod linux;
 #[cfg(target_os = "osx")]
 mod osx;
-#[cfg(target_os = "windows")]
+// #[cfg(target_os = "windows")]
 mod windows;
 
 #[cfg(target_os = "linux")]
 pub use self::linux::{Connection, Linux as WiFi};
 #[cfg(target_os = "osx")]
 pub use self::osx::{Connection, Osx as WiFi};
-#[cfg(target_os = "windows")]
+// #[cfg(target_os = "windows")]
 pub use self::windows::{Connection, Windows as WiFi};
 
 use std::{fmt, io};

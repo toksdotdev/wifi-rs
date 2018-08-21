@@ -27,6 +27,7 @@ impl Osx {
 /// Wifi interface for osx operating system.
 /// This provides basic functionalities for wifi interface.
 impl WifiInterface for Osx {
+    /// Check if wireless network adapter is enabled.
     fn is_wifi_enabled() -> Result<bool, WifiError> {
         let output = Command::new("networksetup")
             .args(&["radio", "wifi"])
@@ -39,6 +40,7 @@ impl WifiInterface for Osx {
             .contains("enabled"))
     }
 
+    /// Turn on the wireless network adapter.
     fn turn_on() -> Result<(), WifiError> {
         let output = Command::new("networksetup")
             .args(&["-setairportpower", "en0", "on"])
@@ -48,6 +50,7 @@ impl WifiInterface for Osx {
         Ok(())
     }
 
+    /// Turn off the wireless network adapter.
     fn turn_off() -> Result<(), WifiError> {
         let output = Command::new("networksetup")
             .args(&["-setairportpower", "en0", "off"])
