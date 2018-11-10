@@ -1,5 +1,5 @@
 extern crate wifi_rs;
-use self::wifi_rs::{prelude::*, Config, WiFi};
+use self::wifi_rs::{prelude::*, WiFi};
 
 #[test]
 fn connect_to_wifi_failed() {
@@ -14,7 +14,12 @@ fn connect_to_wifi_failed() {
 
 #[test]
 fn create_hotspot() {
-  let hotspot_created = WiFi::create_hotspot("hello", "hi").unwrap();
+  let config = Some(Config {
+    interface: Some("wlo1"),
+  });
+
+  let mut wifi = WiFi::new(config);
+  let hotspot_created = wifi.create_hotspot("hello", "hi", None).unwrap();
 
   assert_eq!(hotspot_created, true);
 }

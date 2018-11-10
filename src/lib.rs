@@ -10,6 +10,7 @@ mod platforms;
 pub mod prelude {
   pub use connectivity::*;
   pub use hotspot::*;
+  pub use platforms::Config;
 }
 
 pub use platforms::WiFi;
