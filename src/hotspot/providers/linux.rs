@@ -1,5 +1,5 @@
-use hotspot::{WifiHotspot, WifiHotspotError};
-use platforms::WiFi;
+use crate::hotspot::{WifiHotspot, WifiHotspotError};
+use crate::platforms::WiFi;
 use std::fmt;
 use std::process::Command;
 

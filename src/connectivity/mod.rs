@@ -4,7 +4,7 @@ mod providers;
 #[cfg(target_os = "windows")]
 mod stubs;
 
-use platforms::WifiError;
+use crate::platforms::WifiError;
 use std::{fmt, io};
 
 /// Wireless network connectivity functionality.

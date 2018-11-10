@@ -1,7 +1,7 @@
 mod providers;
 
 use self::providers::prelude::HotspotConfig;
-use platforms::{WifiError, WifiInterface};
+use crate::platforms::{WifiError, WifiInterface};
 use std::{fmt, io};
 
 /// Error that might occur when interacting managing wireless hotspot.

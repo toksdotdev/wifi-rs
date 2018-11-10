@@ -2,8 +2,8 @@ mod connectivity;
 mod hotspot;
 mod platforms;
 
-use connectivity::{Connectivity, WifiConnectionError};
-use platforms::{Config, WiFi};
+use crate::connectivity::{Connectivity, WifiConnectionError};
+use crate::platforms::{Config, WiFi};
 
 fn main() -> Result<(), WifiConnectionError> {
     let config = Some(Config {
