@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 mod connectivity;
 #[cfg(target_os = "windows")]
 mod handler;
