@@ -2,6 +2,12 @@
 name = "wifi-rs"
 version = "0.1.0"
 authors = ["Tochukwu Nkemdilim <nkemdilimtochukwu@gmail.com>"]
+description = "Interface with and manage Wireless Network (WiFi)"
+license = "MIT"
+keywords = ["wifi", "network", "wireless"]
+categories = ["api-bindings", "network-programming"]
+repository = "https://github.com/tnkemdilim/wifi-rs"
+readme = "README.md"
 
 [dependencies]
 tempfile = "3.0.2"
