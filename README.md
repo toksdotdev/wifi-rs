@@ -79,7 +79,7 @@ fn main() -> Result<(), WifiConnectionError> {
 ### General
 
 - [x] Return detailed error messages.
-- [ ] Write documentation. **(approx. percentage: 20%)**
+- [x] Write documentation.
 - [ ] Update `wifi-CLI` with recent updates.
 - [ ] Write tests.
 
@@ -92,4 +92,3 @@ Any feature you feel is missing, why not send in a Pull Request, and let's help 
 Love this project, please feel free to buy me a coffee below:
 <br>
 <a href="https://www.buymeacoffee.com/tnkemdilim" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
-

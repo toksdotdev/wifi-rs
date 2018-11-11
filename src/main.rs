@@ -12,7 +12,7 @@ fn main() -> Result<(), WifiConnectionError> {
 
     let mut wifi = WiFi::new(config);
 
-    match wifi.connect("AndroidAPSD22", "belm4235") {
+    match wifi.connect("CSIS_MH", "") {
         Ok(result) => println!(
             "{}",
             if result == true {

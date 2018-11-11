@@ -16,6 +16,7 @@ pub struct HotspotConfig {
     channel: Option<Channel>,
 }
 
+#[allow(dead_code)]
 #[derive(Debug)]
 /// Band type of wireless hotspot.
 pub enum HotspotBand {
@@ -25,6 +26,7 @@ pub enum HotspotBand {
     Bg,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
 /// Channel to broadcast wireless hotspot on.
 pub enum Channel {
