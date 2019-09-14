@@ -1,3 +1,4 @@
+use hotspot::{WifiHotspot, WifiHotspotError};
 use connectivity::{Connectivity, WifiConnectionError};
 use platforms::WiFi;
 use std::process::Command;
