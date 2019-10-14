@@ -19,7 +19,7 @@ Note that only **open**, **WEP** and **WPA-PSK** networks are supported at the m
 
 - Windows
 - Linux
-- OSx
+- MacOS
 
 ## Example
 
@@ -70,9 +70,9 @@ fn main() -> Result<(), WifiConnectionError> {
 - [x] Add hotspot functionality.
 - [ ] Add get network type feature.
 
-### OsX
+### MacOS
 
-- [x] Add support for OSX.
+- [x] Add support for MacOS.
 - [ ] Add get network type feature.
 - [ ] Add hotspot functionality.
 
