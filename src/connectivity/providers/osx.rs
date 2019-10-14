@@ -17,10 +17,7 @@ impl Connectivity for WiFi {
             .output()
             .map_err(|err| WifiConnectionError::FailedToConnect(format!("{}", err)))?;
 
-        if !String::from_utf8_lossy(&output.stdout)
-            .as_ref()
-            .contains("successfully activated")
-        {
+        if String::from_utf8_lossy(&output.stdout).as_ref() != "" {
             return Ok(false);
         }
 

@@ -1,4 +1,4 @@
-use platforms::{WifiError, WifiInterface};
+use platforms::{Config, WifiError, WifiInterface};
 use std::process::Command;
 
 #[derive(Debug)]
@@ -14,7 +14,7 @@ pub struct Osx {
 }
 
 impl Osx {
-    pub fn new(name: &str, config: Option<Config>) -> Self {
+    pub fn new(config: Option<Config>) -> Self {
         Osx {
             connection: None,
             interface: config.map_or("en0".to_string(), |cfg| {

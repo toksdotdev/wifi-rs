@@ -1,13 +1,13 @@
 #[cfg(target_os = "linux")]
 mod linux;
-#[cfg(target_os = "osx")]
+#[cfg(target_os = "macos")]
 mod osx;
 #[cfg(target_os = "windows")]
 mod windows;
 
 #[cfg(target_os = "linux")]
 pub use self::linux::{Connection, Linux as WiFi};
-#[cfg(target_os = "osx")]
+#[cfg(target_os = "macos")]
 pub use self::osx::{Connection, Osx as WiFi};
 #[cfg(target_os = "windows")]
 pub use self::windows::{Connection, Windows as WiFi};
