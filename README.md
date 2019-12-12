@@ -2,12 +2,13 @@
 
 A rust crate to interface and manage Wi-Fi networks.
 
-## How it works
+This is a command-line counterpart of managing networks using a GUI client.
 
-- The command creates a new connection and then activates it on a device.
-- This is a command-line counterpart of clicking an SSID in a GUI client.
-- The command always creates a new connection and thus it is mainly useful for connecting to new Wi-Fi networks.
-- If a connection for the network already exists, it is better to bring up (activate) the existing connection as follows: `WiFi::connection_up("SSID")`.
+## Features
+
+- Allows connecting to a WiFi (Windows, Linux, MacOS).
+- Allows disconnect from a WiFi network (Windows, Linux, MacOS).
+- Allows creating hotspot (All except MacOS).
 
 ## Currently supported network types
 
@@ -51,7 +52,7 @@ fn main() -> Result<(), WifiConnectionError> {
 }
 ```
 
-## Features
+## Todos
 
 ### Windows
 
@@ -73,8 +74,8 @@ fn main() -> Result<(), WifiConnectionError> {
 ### MacOS
 
 - [x] Add support for MacOS.
-- [ ] Add get network type feature.
 - [ ] Add hotspot functionality.
+- [ ] Add get network type feature.
 
 ### General
 
@@ -84,7 +85,7 @@ fn main() -> Result<(), WifiConnectionError> {
 
 ## Contribution
 
-Any feature you feel is missing, why not send in a Pull Request, and let's help make this project better. Or are there any bugs, kindly create an issue, so we could work towards fixing it.
+Any feature you feel is missing, why not send in a Pull Request, and let's help make this project better. Or are there any bugs, kindly create an issue, so we could work together towards fixing it.
 
 ## Support
 
