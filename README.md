@@ -23,7 +23,7 @@ Note that only **open**, **WEP** and **WPA-PSK** networks are supported at the m
 
 ## Example
 
-```RUST
+```Rust
 extern crate wifi_rs;
 use wifi_rs::prelude::*;
 use wifi_rs::{WiFi, Config};
@@ -80,8 +80,7 @@ fn main() -> Result<(), WifiConnectionError> {
 
 - [x] Return detailed error messages.
 - [x] Write documentation.
-- [ ] Update `wifi-CLI` with recent updates.
-- [ ] Write tests.
+- [x] Update `wifi-CLI` with recent updates.
 
 ## Contribution
 
@@ -89,6 +88,6 @@ Any feature you feel is missing, why not send in a Pull Request, and let's help 
 
 ## Support
 
-Love this project, please feel free to buy me a coffee below:
-<br>
+Love this project, please feel free to buy me a coffee.
+
 <a href="https://www.buymeacoffee.com/tnkemdilim" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
