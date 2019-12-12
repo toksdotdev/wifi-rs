@@ -1,6 +1,6 @@
 [package]
 name = "wifi-rs"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Tochukwu Nkemdilim <nkemdilimtochukwu@gmail.com>"]
 description = "Interface with and manage Wireless Network (WiFi)"
 license = "MIT"
