@@ -6,9 +6,9 @@ This is a command-line counterpart of managing networks using a GUI client.
 
 ## Features
 
-- Allows connecting to a WiFi (Windows, Linux, MacOS).
-- Allows disconnect from a WiFi network (Windows, Linux, MacOS).
-- Allows creating hotspot (All except MacOS).
+- Connect to a WiFi (`Windows`, `Linux`, `MacOS`).
+- Disconnect from a WiFi network (`Windows`, `Linux`, `MacOS`).
+- Create hotspot (All except `MacOS`).
 
 ## Currently supported network types
 
