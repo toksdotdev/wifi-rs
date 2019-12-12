@@ -1,6 +1,4 @@
 mod connectivity;
-#[cfg(target_os = "windows")]
-mod handler;
 mod hotspot;
 mod platforms;
 
