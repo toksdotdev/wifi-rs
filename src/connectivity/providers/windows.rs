@@ -45,14 +45,14 @@ impl Connectivity for WiFi {
             .args(&[
                 "wlan",
                 "connect",
-                &format!("name={}", *self.connection.unwrap().ssid),
+                &format!("name={}", ssid),
             ])
             .output()
             .map_err(|err| WifiConnectionError::FailedToConnect(format!("{}", err)))?;
 
         if !String::from_utf8_lossy(&output.stdout)
             .as_ref()
-            .contains("successfully activated")
+            .contains("completed successfully")
         {
             return Ok(false);
         }

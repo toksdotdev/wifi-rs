@@ -43,7 +43,7 @@ impl WifiInterface for Windows {
             .output()
             .map_err(|err| WifiError::IoError(err))?;
 
-        Ok(!String::from_utf8_lossy(&output.stdout).contains("disconnected"))
+        Ok(!String::from_utf8_lossy(&output.stdout).contains("There is no wireless interface"))
     }
 
     /// Turn on the wireless network adapter.
