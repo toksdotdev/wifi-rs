@@ -64,7 +64,7 @@ impl WifiInterface for Windows {
 
     /// Turn off the wireless network adapter.
     fn turn_off() -> Result<(), WifiError> {
-        let _output = Command::new("nmcli")
+        let _output = Command::new("netsh")
             .args(&[
                 "interface",
                 "set",
