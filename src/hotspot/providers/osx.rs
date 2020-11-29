@@ -1,9 +1,8 @@
-use hotspot::{WifiHotspot, WifiHotspotError};
-use connectivity::{Connectivity, WifiConnectionError};
+use hotspot::WifiHotspot;
 use platforms::WiFi;
-use std::process::Command;
 
 /// Configuration for a wireless hotspot.
+#[allow(dead_code)]
 pub struct HotspotConfig {}
 
 /// Wireless hotspot functionality for a wifi interface.

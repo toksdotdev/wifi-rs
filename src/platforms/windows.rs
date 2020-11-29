@@ -48,7 +48,7 @@ impl WifiInterface for Windows {
 
     /// Turn on the wireless network adapter.
     fn turn_on() -> Result<(), WifiError> {
-        let _output = Command::new("netsh")
+        Command::new("netsh")
             .args(&[
                 "interface",
                 "set",

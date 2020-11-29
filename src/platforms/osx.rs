@@ -33,15 +33,12 @@ impl WifiInterface for Osx {
             .output()
             .map_err(|err| WifiError::IoError(err))?;
 
-        Ok(String::from_utf8_lossy(&output.stdout)
-            .replace(" ", "")
-            .replace("\n", "")
-            .contains("enabled"))
+        Ok(String::from_utf8_lossy(&output.stdout).contains("enabled"))
     }
 
     /// Turn on the wireless network adapter.
     fn turn_on() -> Result<(), WifiError> {
-        let output = Command::new("networksetup")
+        Command::new("networksetup")
             .args(&["-setairportpower", "en0", "on"])
             .output()
             .map_err(|err| WifiError::IoError(err))?;
@@ -51,7 +48,7 @@ impl WifiInterface for Osx {
 
     /// Turn off the wireless adapter.
     fn turn_off() -> Result<(), WifiError> {
-        let output = Command::new("networksetup")
+        Command::new("networksetup")
             .args(&["-setairportpower", "en0", "off"])
             .output()
             .map_err(|err| WifiError::IoError(err))?;
