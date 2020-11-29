@@ -42,7 +42,7 @@ impl WifiInterface for Linux {
 
     /// Turn on the wireless network adapter.
     fn turn_on() -> Result<(), WifiError> {
-        let _output = Command::new("nmcli")
+        Command::new("nmcli")
             .args(&["radio", "wifi", "on"])
             .output()
             .map_err(|err| WifiError::IoError(err))?;
@@ -52,7 +52,7 @@ impl WifiInterface for Linux {
 
     /// Turn off the wireless network adapter.
     fn turn_off() -> Result<(), WifiError> {
-        let _output = Command::new("nmcli")
+        Command::new("nmcli")
             .args(&["radio", "wifi", "off"])
             .output()
             .map_err(|err| WifiError::IoError(err))?;
