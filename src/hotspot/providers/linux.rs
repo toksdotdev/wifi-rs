@@ -26,7 +26,6 @@ pub enum HotspotBand {
     Bg,
 }
 
-#[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
 /// Channel to broadcast wireless hotspot on.
 pub enum Channel {
