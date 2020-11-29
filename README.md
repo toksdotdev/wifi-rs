@@ -2,13 +2,13 @@
 
 A rust crate to interface and manage Wi-Fi networks.
 
-This is a command-line counterpart of managing networks using a GUI client.
+This is a command-line counterpart of managing networks instead of via a GUI.
 
 ## Features
 
 - Connect to a WiFi (`Windows`, `Linux`, `MacOS`).
 - Disconnect from a WiFi network (`Windows`, `Linux`, `MacOS`).
-- Create hotspot (All except `MacOS`).
+- Create hotspot (`Windows`, `Linux`).
 
 ## Currently supported network types
 
@@ -89,6 +89,4 @@ Any feature you feel is missing, why not send in a Pull Request, and let's help 
 
 ## Support
 
-Love this project, please feel free to buy me a coffee.
-
-<a href="https://www.buymeacoffee.com/tnkemdilim" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+Love this project, please show some love by staring the project 😃.
