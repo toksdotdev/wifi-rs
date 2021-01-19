@@ -7,14 +7,15 @@ use std::fmt;
 /// Error that might occur when interacting managing wireless hotspot.
 #[derive(Debug)]
 pub enum WifiHotspotError {
-    /// Failed to ceate wireless hotspot.
-    #[cfg(target_os = "linux")]
-    #[cfg(target_os = "windows")]
+    /// Failed to ceate wireless hotspot.s
+    #[cfg(any(target_os = "windows", target_os = "linux"))]
     CreationFailed,
+
     /// Failed to stop wireless hotspot service. Try turning off
     /// the wireless interface via ```wifi.turn_off()```.
     #[cfg(target_os = "linux")]
     FailedToStop(std::io::Error),
+
     /// A wireless interface error occurred.
     Other { kind: WifiError },
 }
