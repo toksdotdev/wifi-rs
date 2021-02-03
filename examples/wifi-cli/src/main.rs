@@ -4,6 +4,7 @@ extern crate wifi_rs;
 use clap::{App, Arg};
 use std::io;
 use wifi_rs::WiFi;
+use wifi_rs::prelude::*;
 
 fn main() -> Result<(), io::Error> {
     let matches = App::new("Wi-Fi")
@@ -48,8 +49,13 @@ fn main() -> Result<(), io::Error> {
     // Get Wireless Interface
     let interface = matches.value_of("interface").unwrap();
 
-    let wifi = WiFi::new(ssid)?;
-    println!("Connection Status: {}", wifi.connect(password));
+    let config = Some(Config {
+        interface: Some(interface),
+    });
+
+    // let wifi = WiFi::new(ssid)?;
+    let mut wifi = WiFi::new(config);
+    println!("Connection Status: {:?}", wifi.connect(ssid, password));
 
     Ok(())
 }

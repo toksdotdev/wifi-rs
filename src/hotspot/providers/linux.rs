@@ -16,6 +16,17 @@ pub struct HotspotConfig {
     channel: Option<Channel>,
 }
 
+/// function to create a new config object
+#[allow(dead_code)]
+impl HotspotConfig {
+    pub fn new(band: Option<HotspotBand>, channel: Option<Channel>) -> HotspotConfig {
+        HotspotConfig {
+            band,
+            channel
+        }
+    }
+}
+
 #[allow(dead_code)]
 #[derive(Debug)]
 /// Band type of wireless hotspot.
@@ -58,9 +69,9 @@ impl WifiHotspot for WiFi {
         let mut command = vec![
             "device".to_string(),
             "wifi".to_string(),
+            "hotspot".to_string(),
             "ifname".to_string(),
             self.interface.to_string(),
-            "hotspot".to_string(),
             "con-name".to_string(),
             HOTSPOT_GROUP.to_string(),
             "ssid".to_string(),

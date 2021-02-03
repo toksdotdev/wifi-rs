@@ -6,6 +6,7 @@ mod platforms;
 pub mod prelude {
   pub use crate::connectivity::*;
   pub use crate::hotspot::*;
+  pub use crate::hotspot::providers::prelude::*;
   pub use crate::platforms::Config;
 }
 
