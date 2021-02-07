@@ -20,10 +20,7 @@ pub struct HotspotConfig {
 #[allow(dead_code)]
 impl HotspotConfig {
     pub fn new(band: Option<HotspotBand>, channel: Option<Channel>) -> HotspotConfig {
-        HotspotConfig {
-            band,
-            channel
-        }
+        HotspotConfig { band, channel }
     }
 }
 
