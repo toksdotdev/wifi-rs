@@ -1,9 +1,8 @@
 [package]
-name = "wifi-cli"
+name = "wifi-connect"
 version = "0.1.0"
 edition = "2018"
 authors = ["Tochukwu Nkemdilim <nkemdilimtochukwu@gmail.com>"]
 
 [dependencies]
-clap = { version = "2.31.2", features = ["yaml"] }
 wifi-rs = { path = "../../../wifi-rs" }

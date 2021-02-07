@@ -1,25 +1,17 @@
-extern crate wifi_rs;
-use self::wifi_rs::{prelude::*, WiFi};
+fn fib(n: usize) -> u32 {
+    let mut first = 1;
+    let mut second = 1;
 
-#[test]
-fn connect_to_wifi_failed() {
-  let config = Some(Config {
-    interface: Some("wlo1"),
-  });
+    for _ in 2..n {
+        let temp = first;
+        first = second;
+        second += temp
+    }
 
-  let mut wifi = WiFi::new(config);
-
-  assert_eq!(wifi.connect("ssid", "password").unwrap(), false);
+    return second;
 }
 
 #[test]
-fn create_hotspot() {
-  let config = Some(Config {
-    interface: Some("wlo1"),
-  });
-
-  let mut wifi = WiFi::new(config);
-  let hotspot_created = wifi.create_hotspot("hello", "hi", None).unwrap();
-
-  assert_eq!(hotspot_created, true);
+fn basic() {
+    assert_eq!(fib(10), 55);
 }

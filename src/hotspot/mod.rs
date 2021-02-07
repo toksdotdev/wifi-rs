@@ -1,4 +1,4 @@
-mod providers;
+pub mod providers;
 
 use self::providers::prelude::HotspotConfig;
 use crate::platforms::{WifiError, WifiInterface};
@@ -44,7 +44,6 @@ pub trait WifiHotspot: fmt::Debug + WifiInterface {
     }
 
     /// Stop serving a wireless network.
-    ///
     /// **NOTE: All users connected will automatically be disconnected.**
     fn stop_hotspot(&mut self) -> Result<bool, WifiHotspotError> {
         unimplemented!();

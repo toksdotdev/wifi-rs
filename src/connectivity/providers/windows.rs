@@ -1,6 +1,7 @@
-use connectivity::handlers::NetworkXmlProfileHandler;
-use connectivity::{Connectivity, WifiConnectionError};
-use platforms::{Connection, WiFi, WifiError, WifiInterface};
+use crate::{
+    connectivity::{handlers::NetworkXmlProfileHandler, Connectivity, WifiConnectionError},
+    platforms::{Connection, WiFi, WifiError, WifiInterface},
+};
 use std::process::Command;
 
 impl WiFi {
@@ -42,11 +43,7 @@ impl Connectivity for WiFi {
         Self::add_profile(ssid, password)?;
 
         let output = Command::new("netsh")
-            .args(&[
-                "wlan",
-                "connect",
-                &format!("name={}", ssid),
-            ])
+            .args(&["wlan", "connect", &format!("name={}", ssid)])
             .output()
             .map_err(|err| WifiConnectionError::FailedToConnect(format!("{}", err)))?;
 

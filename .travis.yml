@@ -1,0 +1,23 @@
+language: rust
+
+os:
+  - linux
+  - osx
+  - windows
+
+rust:
+  - nightly
+  - beta
+  - stable
+
+matrix:
+  allow_failures:
+    - rust: nightly
+
+script:
+  - cargo build
+  - cargo test
+
+notifications:
+  email:
+    on_success: never

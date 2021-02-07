@@ -1,9 +1,11 @@
-use hotspot::{WifiHotspot, WifiHotspotError};
-use platforms::{WiFi, WifiError, WifiInterface};
+use crate::{
+    hotspot::{WifiHotspot, WifiHotspotError},
+    platforms::{WiFi, WifiError, WifiInterface},
+};
 use std::process::Command;
 
 /// Configuration for a wireless hotspot.
-pub struct HotspotConfig {}
+pub struct HotspotConfig;
 
 impl WiFi {
     /// Attempts to turn on a wireless networ if down.
