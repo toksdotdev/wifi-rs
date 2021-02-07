@@ -1,10 +1,7 @@
-extern crate clap;
-extern crate wifi_rs;
-
 use clap::{App, Arg};
 use std::io;
-use wifi_rs::WiFi;
 use wifi_rs::prelude::*;
+use wifi_rs::WiFi;
 
 fn main() -> Result<(), io::Error> {
     let matches = App::new("Wi-Fi")

@@ -1,6 +1,4 @@
-use platforms::Config;
-use platforms::WifiError;
-use platforms::WifiInterface;
+use crate::platforms::{Config, WifiError, WifiInterface};
 use std::process::Command;
 
 const WINDOWS_INTERFACE: &'static str = "Wireless Network Connection";

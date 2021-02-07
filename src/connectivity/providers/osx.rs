@@ -1,5 +1,7 @@
-use connectivity::{Connectivity, WifiConnectionError};
-use platforms::{Connection, WiFi, WifiError, WifiInterface};
+use crate::{
+    connectivity::{Connectivity, WifiConnectionError},
+    platforms::{Connection, WiFi, WifiError, WifiInterface},
+};
 use std::process::Command;
 
 /// Wireless network connectivity functionality.

@@ -1,4 +1,4 @@
-use platforms::{Config, WifiError, WifiInterface};
+use crate::platforms::{Config, WifiError, WifiInterface};
 use std::process::Command;
 
 #[derive(Debug)]
