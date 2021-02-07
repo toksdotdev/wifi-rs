@@ -1,8 +1,6 @@
-extern crate tempfile;
-
-use self::tempfile::NamedTempFile;
-use connectivity::stubs::windows_wifi_profile;
+use crate::connectivity::stubs::windows_wifi_profile;
 use std::{io, io::Write};
+use tempfile::NamedTempFile;
 
 /// A netowork XML handler for windows, responsible creating
 /// disposable xml profiles files.

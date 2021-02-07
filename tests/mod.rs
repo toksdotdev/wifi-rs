@@ -1,5 +1,3 @@
-extern crate wifi_rs;
-
 fn fib(n: usize) -> u32 {
     let mut first = 1;
     let mut second = 1;
