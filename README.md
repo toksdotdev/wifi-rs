@@ -38,7 +38,7 @@ fn main() -> Result<(), WifiConnectionError> {
         Ok(result) => println!(
             "{}",
             if result == true {
-                "Connection Successfull."
+                "Connection Successful."
             } else {
                 "Invalid password."
             }
@@ -83,8 +83,8 @@ fn main() -> Result<(), WifiConnectionError> {
 
 ## Contribution
 
-Any feature you feel is missing, why not send in a Pull Request, and let's help make this project better. Or are there any bugs, kindly create an issue, so we could work together towards fixing it.
+Any feature you feel is missing, why not send in a Pull Request, and let's help make this project better. Or if there are any bugs, kindly create an issue, so we could work together towards fixing it.
 
 ## Support
 
-Love this project, please show some love by staring the project 😃.
+Love this project, please show some love by starring the project 😃.
