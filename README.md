@@ -25,7 +25,7 @@ Note that only **open**, **WEP** and **WPA-PSK** networks are supported at the m
 ## Example
 
 ```Rust
-use wifi_rs::{prelude::*, Wifi};
+use wifi_rs::{prelude::*, WiFi};
 
 fn main() -> Result<(), WifiConnectionError> {
     let config = Some(Config {
