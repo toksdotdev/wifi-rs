@@ -10,5 +10,5 @@ categories = ["api-bindings", "network-programming"]
 repository = "https://github.com/toksdotdev/wifi-rs"
 readme = "README.md"
 
-[dependencies]
+[target.'cfg(windows)'.dependencies]
 tempfile = "3.0.2"
