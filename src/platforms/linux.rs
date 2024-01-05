@@ -3,7 +3,7 @@ use std::process::Command;
 
 #[derive(Debug)]
 pub struct Connection {
-    pub(crate) ssid: String,
+    // pub(crate) ssid: String,
 }
 
 /// Wireless network interface for linux operating system.

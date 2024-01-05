@@ -34,7 +34,7 @@ impl Connectivity for WiFi {
         }
 
         self.connection = Some(Connection {
-            ssid: String::from(ssid),
+            // ssid: String::from(ssid),
         });
 
         Ok(true)
