@@ -1,6 +1,8 @@
 use crate::connectivity::{Connectivity, WifiConnectionError};
 use crate::platforms::{Connection, WiFi, WifiError, WifiInterface};
-use std::process::Command;
+use std::process::{Command, Stdio};
+use std::str;
+use std::format;
 
 /// Wireless network connectivity functionality.
 impl Connectivity for WiFi {
@@ -50,5 +52,26 @@ impl Connectivity for WiFi {
         Ok(String::from_utf8_lossy(&output.stdout)
             .as_ref()
             .contains("disconnect"))
+    }
+
+    fn speed(&self) -> Result<String, WifiConnectionError> {
+        let nmcli_speed = Command::new("nmcli")
+            .arg("dev")
+            .arg("wifi")
+            .arg("list")
+            .stdout(Stdio::piped())
+            .spawn()
+            .expect("nothing");
+        let piped_awk = Command::new("awk")
+            .arg(r"/\*/{if (NR!=1) {print $6}}")
+            .stdin(Stdio::from(nmcli_speed.stdout.unwrap())) // Pipe through.
+            .stdout(Stdio::piped())
+            .spawn()
+            .unwrap();
+
+        let result = piped_awk.wait_with_output().unwrap();
+        let result = str::from_utf8(&result.stdout).unwrap().to_string();
+        let formatted_result = format!("{} Mbit/s", result.trim());
+        Ok(formatted_result)
     }
 }
