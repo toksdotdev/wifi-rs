@@ -1,5 +1,4 @@
 use std::{fmt, io};
-
 use crate::platforms::WifiError;
 
 #[cfg(target_os = "windows")]
@@ -7,6 +6,7 @@ mod handlers;
 mod providers;
 #[cfg(target_os = "windows")]
 mod stubs;
+
 
 /// Wireless network connectivity functionality.
 pub trait Connectivity: fmt::Debug {
@@ -18,7 +18,6 @@ pub trait Connectivity: fmt::Debug {
 
     // determines speed when connected to a network
     fn speed(&self) -> Result<String, WifiConnectionError>;
-
 }
 
 /// Error that occurs when attempting to connect to a wireless network.
