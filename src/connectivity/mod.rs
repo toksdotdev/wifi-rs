@@ -16,8 +16,9 @@ pub trait Connectivity: fmt::Debug {
     /// Disconnects from a wireless network currently connected to.
     fn disconnect(&self) -> Result<bool, WifiConnectionError>;
 
-    // determines speed when connected to a network
-    fn speed(&self) -> Result<String, WifiConnectionError>;
+    // Determines speed when connected to a network
+    // Adding unimplemented block
+    fn speed(&self) -> Result<String, WifiConnectionError> { unimplemented!(); }
 }
 
 /// Error that occurs when attempting to connect to a wireless network.
