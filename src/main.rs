@@ -10,12 +10,12 @@ use std::process::{Command, Stdio};
 
 fn main() -> Result<(), WifiConnectionError> {
     let config = Some(Config {
-        interface: Some("wlan0"),
+        interface: Some("wlo1"),
     });
 
     let mut wifi = WiFi::new(config);
 
-    match wifi.connect("TP-Link_CEE2", "05Bs@sdfvn") {
+    match wifi.connect("CSIS_MH", "") {
         Ok(result) => println!(
             "{}",
             if result == true {
@@ -26,6 +26,7 @@ fn main() -> Result<(), WifiConnectionError> {
         ),
         Err(err) => println!("The following error occurred: {:?}", err),
     }
+
     let speed = wifi.speed().unwrap();
     println!("Speed is: {}", speed);
 
