@@ -61,7 +61,8 @@ impl Connectivity for WiFi {
             .arg("list")
             .stdout(Stdio::piped())
             .spawn()
-            .expect("nothing");
+            .unwrap();
+
         let piped_awk = Command::new("awk")
             .arg(r"/\*/{if (NR!=1) {print $6}}")
             .stdin(Stdio::from(nmcli_speed.stdout.unwrap())) // Pipe through.
